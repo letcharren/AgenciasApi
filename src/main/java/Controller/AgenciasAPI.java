@@ -9,13 +9,19 @@ import java.util.Collection;
 
 import static Utils.JsonUtils.json;
 import static spark.Spark.*;
-
+/*
+Implementacion de una API que consume de AGENCIES API de Mercado Libre
+El puerto por defecto es 4567
+ */
 public class AgenciasAPI {
 
     public static void main(String[] args) {
-        //port (8000);
-        AgencyController agencyController = new AgencyController();
-
+¡        AgencyController agencyController = new AgencyController();
+        /**
+         * Devuelve un arreglo de agencias para un sitio y un método de pago en particular,
+         * según las coordenadas de GeoLocation y el radio de búsqueda (en metros).
+         * El response es enviado en formato json
+         */
         get("/agencias" ,(req,res)-> {
             StandardResponse body= new StandardResponse(StatusResponse.SUCCESS);
             try{

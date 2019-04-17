@@ -1,5 +1,8 @@
 package Model;
 
+/**
+ *
+ */
 public class Address {
     private String address_line;
     private String city;

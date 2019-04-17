@@ -17,14 +17,28 @@ import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 
+/**
+ * Clase que maneja los request del model Agencia
+ */
 public class AgencyController {
 
     /**
      *
-     * @param req
-     * @param res
-     * @return
-     * @throws ExceptionAgency
+     * @param req Request HTTP
+     *            parametros en req.queryParams():
+     *            * sites (obligatorio): es el código del sitio ("MLA", "MLM", "MLV", etc.)
+     *            * payment_methods (obligatorio): es el nombre del método de pago ("rapipago", "pagofacil", "serfin", "banamex", etc.)
+     *            * near_to (mandatory): is the latitude and longitude coordinates and the search radius specified in meters.
+     *            * limits (opcional): es el número máximo de elementos que se recuperarán. Valor por defecto: 50, mín. valor: 1, max. valor: 100.
+     *            * offset (opcional): es el número del primer elemento que se recupera (útil para la paginación).
+     *            Valor por defecto: 0, mín. valor: 0, max. valor: -
+     *            * orderBy (opcional): Es por el valor por el cual puede ser ordenado. Los valores admitidos son address_line,distance,agency_code
+     * @param res Respose HTTP. Se setea el status de la respuesta
+     * @return Devuelve un arreglo de agencias para un sitio y un método de pago en particular,
+     * según las coordenadas de GeoLocation y el radio de búsqueda (en metros).
+     * El arreglo de resultados está ordenada en orden ascendente, considerando la distancia entre cada agencia
+     * y las coordenadas de GeoLocation.
+     * @throws ExceptionAgency cuando Ocurre una excepcion. Si esto ocurre, se setea el correspondiente codigo de respuesta
      */
     public Collection<Agency> agency(Request req, Response res) throws ExceptionAgency {
 
@@ -93,7 +107,12 @@ public class AgencyController {
         }
     }
 
-
+    /**
+     *
+     * @param urlStr String de la Url de la cual se quiere hace la solicitud
+     * @return Retorna un String con con la respuesta de la URL
+     * @throws IOException si hubo un error cuando se solicita el recurso a la URL
+     */
     private static String readUrl(String urlStr) throws IOException {
 
         BufferedReader reader = null;

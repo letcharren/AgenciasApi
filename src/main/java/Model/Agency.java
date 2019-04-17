@@ -2,6 +2,9 @@ package Model;
 
 import static Model.SortCriteria.*;
 
+/**
+ * Clase que modela la informacion de una direccion de Mercado Libre con sus correspondientes getters and Setters
+ */
 public class Agency implements Comparable<Agency> {
     private Integer agency_code;
     private String correspondent_id;
