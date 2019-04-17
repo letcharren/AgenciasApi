@@ -30,8 +30,9 @@ public class AgencyController {
      *            * payment_methods (obligatorio): es el nombre del método de pago ("rapipago", "pagofacil", "serfin", "banamex", etc.)
      *            * near_to (mandatory): is the latitude and longitude coordinates and the search radius specified in meters.
      *            * limits (opcional): es el número máximo de elementos que se recuperarán. Valor por defecto: 50, mín. valor: 1, max. valor: 100.
+     *                  caso de no cumplir con las restricciones se usa el valor por defecto
      *            * offset (opcional): es el número del primer elemento que se recupera (útil para la paginación).
-     *            Valor por defecto: 0, mín. valor: 0, max. valor: -
+     *                  Valor por defecto: 0, mín. valor: 0, max. valor: -. caso de no cumplir con las restricciones se usa el valor por defecto
      *            * orderBy (opcional): Es por el valor por el cual puede ser ordenado. Los valores admitidos son address_line,distance,agency_code
      * @param res Respose HTTP. Se setea el status de la respuesta
      * @return Devuelve un arreglo de agencias para un sitio y un método de pago en particular,
@@ -53,15 +54,15 @@ public class AgencyController {
         String url = "https://api.mercadolibre.com/sites/" + req.queryParams("sites") + "/payment_methods/" + req.queryParams("payment_methods") + "/agencies?near_to=" + req.queryParams("near_to");
         if (req.queryParams("limit")!=null){
             if(req.queryParams("limit").isEmpty()){
-                throw new ExceptionAgency("los paramentros sites, payment_methods, near_to no pueden ser vacios");
+                throw new ExceptionAgency("El parametro limit no puede ser vacio");
             }
-            url.concat("&limit=" + (req.queryParams("limit")));
+            url = url.concat("&limit=" + (req.queryParams("limit")));
         }
         if (req.queryParams("offset")!=null){
             if(req.queryParams("offset").isEmpty()){
                 throw new ExceptionAgency("Parametro Limit vacio");
             }
-            url.concat("&offset=" + (req.queryParams("offset")));
+            url = url.concat("&offset=" + (req.queryParams("offset")));
         }
         try{
             String data = readUrl(url);
