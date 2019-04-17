@@ -24,7 +24,7 @@ public class AgenciasAPI {
                 body.setStatus(StatusResponse.SUCCESS);
                 body.setData(new Gson().toJsonTree(agencies));
             }catch (ExceptionAgency e){
-                body.setStatus(StatusResponse.SUCCESS);
+                body.setStatus(StatusResponse.ERROR);
                 body.setMessage(e.getMessage());
             }
             return body;

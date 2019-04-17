@@ -19,18 +19,34 @@ import java.util.LinkedList;
 
 public class AgencyController {
 
-
+    /**
+     *
+     * @param req
+     * @param res
+     * @return
+     * @throws ExceptionAgency
+     */
     public Collection<Agency> agency(Request req, Response res) throws ExceptionAgency {
 
         if (req.queryParams("sites") == null || req.queryParams("payment_methods") == null || req.queryParams("near_to") == null) {
             res.status(400);
             throw new ExceptionAgency("los paramentros sites, payment_methods, near_to no pueden ser nulos");
         }
+        if (req.queryParams("sites").isEmpty() || req.queryParams("payment_methods").isEmpty() || req.queryParams("near_to").isEmpty()) {
+            res.status(400);
+            throw new ExceptionAgency("los paramentros sites, payment_methods, near_to no pueden ser vacios");
+        }
         String url = "https://api.mercadolibre.com/sites/" + req.queryParams("sites") + "/payment_methods/" + req.queryParams("payment_methods") + "/agencies?near_to=" + req.queryParams("near_to");
         if (req.queryParams("limit")!=null){
+            if(req.queryParams("limit").isEmpty()){
+                throw new ExceptionAgency("los paramentros sites, payment_methods, near_to no pueden ser vacios");
+            }
             url.concat("&limit=" + (req.queryParams("limit")));
         }
         if (req.queryParams("offset")!=null){
+            if(req.queryParams("offset").isEmpty()){
+                throw new ExceptionAgency("Parametro Limit vacio");
+            }
             url.concat("&offset=" + (req.queryParams("offset")));
         }
         try{
@@ -57,10 +73,23 @@ public class AgencyController {
             }
             res.status(200);
             return Arrays.asList(agencies);
-
-        }catch (IOException E){
+        }catch (IOException e){
+            int ResponseCodeInit = e.getMessage().lastIndexOf("HTTP");
+            int ResponseCodeLast = e.getMessage().lastIndexOf("for");
+            String messagge;
             res.status(500);
-            throw new ExceptionAgency("Error en el servidor");
+            if (ResponseCodeInit<0 || ResponseCodeLast<0) {
+                messagge = "Error con la conexion a la API Mercado Libre";
+            }else{
+                String respuesta = e.getMessage().substring(ResponseCodeInit, ResponseCodeLast).replaceFirst("response code", "codigo respuesta");
+                if (respuesta.contains("400")){
+                    res.status(400);
+                    messagge = ("Error con el formato de parametros mandados");
+                }else{
+                    messagge= "Error Procesando request por parte de API ML";
+                }
+            }
+            throw new ExceptionAgency(messagge);
         }
     }
 
