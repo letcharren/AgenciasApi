@@ -54,12 +54,14 @@ public class AgencyController {
         String url = "https://api.mercadolibre.com/sites/" + req.queryParams("sites") + "/payment_methods/" + req.queryParams("payment_methods") + "/agencies?near_to=" + req.queryParams("near_to");
         if (req.queryParams("limit")!=null){
             if(req.queryParams("limit").isEmpty()){
+                res.status(400);
                 throw new ExceptionAgency("El parametro limit no puede ser vacio");
             }
             url = url.concat("&limit=" + (req.queryParams("limit")));
         }
         if (req.queryParams("offset")!=null){
             if(req.queryParams("offset").isEmpty()){
+                res.status(400);
                 throw new ExceptionAgency("Parametro Limit vacio");
             }
             url = url.concat("&offset=" + (req.queryParams("offset")));
@@ -82,6 +84,7 @@ public class AgencyController {
                         Agency.setSortCriteria(SortCriteria.AGENCY_CODE);
                         break;
                     default:
+                        res.status(400);
                         throw new ExceptionAgency("Metodo de ordenamiento no admitido");
                 }
                 Sort.sortByCriteria(agencies);
@@ -132,7 +135,8 @@ public class AgencyController {
                 buffer.append(chars, 0, read);
             }
             return buffer.toString();
-        } finally {
+        }
+        finally {
             if (reader != null) {
                 reader.close();
             }

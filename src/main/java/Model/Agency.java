@@ -12,7 +12,7 @@ public class Agency implements Comparable<Agency> {
     private boolean disabled;
     private Double distance;
     private String id;
-    private String payent_method_id;
+    private String payment_method_id;
     private String phone;
     private String site_id;
     private String terminal;
@@ -70,12 +70,12 @@ public class Agency implements Comparable<Agency> {
         this.id = id;
     }
 
-    public String getPayent_method_id() {
-        return payent_method_id;
+    public String getPayment_method_id() {
+        return payment_method_id;
     }
 
-    public void setPayent_method_id(String payent_method_id) {
-        this.payent_method_id = payent_method_id;
+    public void setPayment_method_id(String payent_method_id) {
+        this.payment_method_id = payent_method_id;
     }
 
     public String getPhone() {
